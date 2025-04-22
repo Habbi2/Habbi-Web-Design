@@ -100,6 +100,8 @@ const AboutPage = () => {
         keywords="web design studio, creative digital agency, UI/UX design team, web development company, brand design specialists"
         ogImage="/images/about-og-image.jpg"
         canonicalUrl="https://habbiwebdesign.com/about"
+        author="Habbi Web Design Team"
+        publishDate="2023-11-15T08:00:00Z"
       />
       
       {/* Hero section */}

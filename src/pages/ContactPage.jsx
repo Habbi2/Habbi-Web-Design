@@ -182,10 +182,12 @@ const ContactPage = () => {
       {/* Page-specific SEO metadata */}
       <Head
         title="Contact Us"
-        description="Get in touch with Habbi Web Design's team for inquiries about your project. Let's create exceptional digital experiences together."
-        keywords="contact web design, hire digital agency, web design inquiry, get website quote, contact form"
+        description="Get in touch with Habbi Web Design. We're ready to discuss your next project and create a digital experience that moves your business forward."
+        keywords="contact web design studio, hire web developer, web design consultation, website project inquiry"
         ogImage="/images/contact-og-image.jpg"
-        canonicalUrl="https://habbiwebdesign.com/contact"
+        canonicalUrl="/contact"
+        author="Habbi Web Design Team"
+        publishDate="2023-12-05T10:00:00Z"
       />
       
       {/* Hero Section */}
