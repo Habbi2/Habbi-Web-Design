@@ -1,0 +1,143 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* App-specific styles */
+
+/* Animations for loading spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Animation for scroll down indicator */
+@keyframes scrollDown {
+  0% { top: -50%; }
+  100% { top: 100%; }
+}
+
+/* Add animation for the hero background gradient */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Link hover effects */
+a:hover span {
+  width: 100% !important;
+}
+
+button:hover span {
+  height: 100% !important;
+}
+
+/* View all projects button hover effect */
+a:hover span[style*="transform: translateX"] {
+  transform: translateX(0) !important;
+}
+
+/* Prevent horizontal overflow */
+body {
+  overflow-x: hidden;
+}
+
+/* Custom focus states */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+}
+
+/* Ensure page takes up full height */
+main {
+  flex-grow: 1;
+}
+
+/* Header nav links hover effect */
+.nav-links li a:hover span {
+  width: 100%;
+}
+
+/* Mobile menu item hover effect */
+.mobile-nav-item a:hover span {
+  width: 100%;
+}
+
+/* Social links hover effect */
+.social-links a:hover {
+  background-color: #00E5FF;
+  transform: translateY(-3px);
+}
+
+/* Portfolio item hover effects */
+.portfolio-item:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+  
+  .desktop-nav {
+    display: none;
+  }
+  
+  .cursor-dot, .cursor-outline {
+    display: none;
+  }
+}
+
+/* Add styles for WebGL background if needed */
+.webgl-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+}
