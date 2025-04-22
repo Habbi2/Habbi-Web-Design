@@ -18,7 +18,7 @@ const Head = ({
   title,
   description,
   keywords,
-  ogImage = "/og-image.jpg",
+  ogImage = "/images/og-image.jpg", // Updated default path to ensure correct image location
   ogType = "website",
   canonicalUrl,
   author = "Habbi Web Design Team",
@@ -27,7 +27,7 @@ const Head = ({
   
   const fullTitle = title ? `${title} | Habbi Web Design` : 'Habbi | High-End Web Design Studio';
   const baseUrl = 'https://habbi-web-design.vercel.app';
-  const ogImageUrl = `${baseUrl}${ogImage}`;
+  const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
   const url = canonicalUrl ? `${baseUrl}${canonicalUrl}` : (typeof window !== 'undefined' ? window.location.href : baseUrl);
   
   return (
@@ -44,6 +44,7 @@ const Head = ({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImageUrl} />
+      <meta name="image" property="og:image" content={ogImageUrl} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={url} />
       
