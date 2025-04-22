@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 
 /**
- * Enhanced Head component for managing page-specific meta tags
- * With improved compatibility for React 19 and Vercel deployment
+ * Custom Head component for managing page-specific meta tags
+ * Compatible with React 19 and Vercel deployment
+ * No dependencies on react-helmet or react-helmet-async
  */
 const Head = ({ 
   title,
@@ -33,8 +33,16 @@ const Head = ({
     document.title = fullTitle;
     
     // Force meta description update
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) metaDescription.setAttribute('content', description);
+    updateMetaTag('description', description, 'name');
+    
+    // Set viewport
+    updateMetaTag('viewport', 'width=device-width, initial-scale=1.0', 'name');
+    
+    // Set language
+    document.documentElement.lang = lang;
+    
+    // Set robots
+    updateMetaTag('robots', robots, 'name');
     
     // Update essential OpenGraph tags explicitly
     updateMetaTag('og:title', fullTitle);
@@ -42,119 +50,120 @@ const Head = ({
     updateMetaTag('og:image', ogImageUrl);
     updateMetaTag('og:type', ogType);
     updateMetaTag('og:url', fullUrl);
+    updateMetaTag('og:site_name', 'Habbi Web Design');
+    updateMetaTag('og:locale', 'en_US');
+    updateMetaTag('og:image:width', '1200');
+    updateMetaTag('og:image:height', '630');
+    
+    // Keywords
+    if (keywords) {
+      updateMetaTag('keywords', keywords, 'name');
+    }
     
     // Update Twitter card tags explicitly
+    updateMetaTag('twitter:card', 'summary_large_image', 'name');
     updateMetaTag('twitter:title', fullTitle, 'name');
     updateMetaTag('twitter:description', description, 'name');
     updateMetaTag('twitter:image', ogImageUrl, 'name');
     
-    // Update canonical URL
-    const canonicalLink = document.querySelector('link[rel="canonical"]');
-    if (canonicalLink) {
-      canonicalLink.setAttribute('href', fullUrl);
-    } else {
-      const link = document.createElement('link');
-      link.rel = 'canonical';
-      link.href = fullUrl;
-      document.head.appendChild(link);
+    // Set author
+    if (author) {
+      updateMetaTag('author', author, 'name');
     }
+    
+    // Set publish date
+    if (publishDate) {
+      updateMetaTag('article:published_time', publishDate);
+    }
+    
+    // Update canonical URL
+    updateCanonicalLink(fullUrl);
+    
+    // Update favicon links
+    updateFaviconLinks();
+    
+    // Set theme color
+    updateMetaTag('theme-color', themeColor, 'name');
     
     // Add structured data if provided
     if (structuredData) {
       addStructuredData(structuredData);
     }
-  }, [fullTitle, description, ogImageUrl, ogType, fullUrl, structuredData]);
-  
-  // Helper function to update or create meta tags
-  const updateMetaTag = (property, content, attributeType = 'property') => {
-    let meta = document.querySelector(`meta[${attributeType}="${property}"]`);
-    if (meta) {
-      meta.setAttribute('content', content);
-    } else {
-      meta = document.createElement('meta');
-      meta.setAttribute(attributeType, property);
-      meta.setAttribute('content', content);
-      document.head.appendChild(meta);
-    }
-  };
-  
-  // Helper function to add structured data
-  const addStructuredData = (data) => {
-    // Remove any existing structured data
-    const existingScript = document.querySelector('script[type="application/ld+json"]');
-    if (existingScript) {
-      existingScript.remove();
-    }
     
-    // Add new structured data
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(data);
-    document.head.appendChild(script);
-  };
+    // Cleanup function to handle component unmounting
+    return () => {
+      // Optional: You could remove tags here if needed
+      // But typically we don't need to as they'll be replaced by next page
+    };
+  }, [fullTitle, description, ogImageUrl, ogType, fullUrl, structuredData, keywords, author, publishDate, robots, lang, themeColor]);
   
-  return (
-    <Helmet defer={false} prioritizeSeoTags>
-      {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      {keywords && <meta name="keywords" content={keywords} />}
-      
-      {/* Responsive design viewport */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      
-      {/* Language */}
-      <html lang={lang} />
-      
-      {/* Robots */}
-      <meta name="robots" content={robots} />
-      
-      {/* Canonical URL */}
-      <link rel="canonical" href={fullUrl} />
-      
-      {/* Favicon links */}
-      <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-      <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-      
-      {/* Theme Color */}
-      <meta name="theme-color" content={themeColor} />
-      
-      {/* Open Graph / Facebook */}
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImageUrl} />
-      <meta name="image" property="og:image" content={ogImageUrl} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={fullUrl} />
-      <meta property="og:site_name" content="Habbi Web Design" />
-      <meta property="og:locale" content="en_US" />
-      
-      {/* Add dimensions for better rendering */}
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      
-      {/* Twitter Card */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImageUrl} />
-      
-      {/* Author information */}
-      {author && <meta name="author" content={author} />}
-      
-      {/* Publication date */}
-      {publishDate && <meta property="article:published_time" content={publishDate} />}
-      
-      {/* Structured Data / JSON-LD */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      )}
-    </Helmet>
-  );
+  return null; // No need to render anything as we're manipulating the document head directly
+};
+
+// Helper function to update or create meta tags
+const updateMetaTag = (property, content, attributeType = 'property') => {
+  if (!content) return; // Skip if content is empty
+  
+  let meta = document.querySelector(`meta[${attributeType}="${property}"]`);
+  if (meta) {
+    meta.setAttribute('content', content);
+  } else {
+    meta = document.createElement('meta');
+    meta.setAttribute(attributeType, property);
+    meta.setAttribute('content', content);
+    document.head.appendChild(meta);
+  }
+};
+
+// Helper function to update canonical link
+const updateCanonicalLink = (url) => {
+  let link = document.querySelector('link[rel="canonical"]');
+  if (link) {
+    link.setAttribute('href', url);
+  } else {
+    link = document.createElement('link');
+    link.rel = 'canonical';
+    link.href = url;
+    document.head.appendChild(link);
+  }
+};
+
+// Helper function to update favicon links
+const updateFaviconLinks = () => {
+  // Helper function to create or update link tags
+  const updateLinkTag = (rel, href, type = null, sizes = null) => {
+    let link = document.querySelector(`link[rel="${rel}"]${sizes ? `[sizes="${sizes}"]` : ''}`);
+    if (link) {
+      link.href = href;
+    } else {
+      link = document.createElement('link');
+      link.rel = rel;
+      link.href = href;
+      if (type) link.type = type;
+      if (sizes) link.sizes = sizes;
+      document.head.appendChild(link);
+    }
+  };
+
+  updateLinkTag('icon', '/vite.svg', 'image/svg+xml');
+  updateLinkTag('apple-touch-icon', '/apple-touch-icon.png', null, '180x180');
+  updateLinkTag('icon', '/favicon-32x32.png', 'image/png', '32x32');
+  updateLinkTag('icon', '/favicon-16x16.png', 'image/png', '16x16');
+};
+
+// Helper function to add structured data
+const addStructuredData = (data) => {
+  // Remove any existing structured data
+  const existingScript = document.querySelector('script[type="application/ld+json"]');
+  if (existingScript) {
+    existingScript.remove();
+  }
+  
+  // Add new structured data
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.text = JSON.stringify(data);
+  document.head.appendChild(script);
 };
 
 export default Head;
