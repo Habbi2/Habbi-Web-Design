@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet, HelmetProvider } from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
 /**
  * Head component for managing page-specific meta tags
@@ -33,41 +33,39 @@ const Head = ({
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
   
   return (
-    <HelmetProvider>
-      <Helmet prioritizeSeoTags>
-        {/* Basic Meta Tags */}
-        <title>{fullTitle}</title>
-        <meta name="description" content={description} />
-        {keywords && <meta name="keywords" content={keywords} />}
-        
-        {/* Canonical URL */}
-        <link rel="canonical" href={fullUrl} />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:title" content={fullTitle} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={ogImageUrl} />
-        <meta name="image" property="og:image" content={ogImageUrl} />
-        <meta property="og:type" content={ogType} />
-        <meta property="og:url" content={fullUrl} />
-        
-        {/* Add dimensions for better rendering */}
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={fullTitle} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={ogImageUrl} />
-        
-        {/* Author information */}
-        {author && <meta name="author" content={author} />}
-        
-        {/* Publication date */}
-        {publishDate && <meta property="article:published_time" content={publishDate} />}
-      </Helmet>
-    </HelmetProvider>
+    <Helmet prioritizeSeoTags>
+      {/* Basic Meta Tags */}
+      <title>{fullTitle}</title>
+      <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
+      
+      {/* Canonical URL */}
+      <link rel="canonical" href={fullUrl} />
+      
+      {/* Open Graph / Facebook */}
+      <meta property="og:title" content={fullTitle} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImageUrl} />
+      <meta name="image" property="og:image" content={ogImageUrl} />
+      <meta property="og:type" content={ogType} />
+      <meta property="og:url" content={fullUrl} />
+      
+      {/* Add dimensions for better rendering */}
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImageUrl} />
+      
+      {/* Author information */}
+      {author && <meta name="author" content={author} />}
+      
+      {/* Publication date */}
+      {publishDate && <meta property="article:published_time" content={publishDate} />}
+    </Helmet>
   );
 };
 
