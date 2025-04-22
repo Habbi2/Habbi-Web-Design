@@ -18,7 +18,7 @@ const Head = ({
   title,
   description,
   keywords,
-  ogImage = "/images/og-image.jpg",
+  ogImage = "/og-image.jpg", // Updated to match the production path
   ogType = "website",
   canonicalUrl,
   author = "Habbi Web Design Team",
@@ -26,7 +26,8 @@ const Head = ({
 }) => {
   
   const fullTitle = title ? `${title} | Habbi Web Design` : 'Habbi | High-End Web Design Studio';
-  const baseUrl = 'https://habbi-web-design.vercel.app';
+  // Use the production domain
+  const baseUrl = 'https://habbiewebdesign.com';
   
   // Ensure the image URL is properly formatted
   let ogImageUrl;
