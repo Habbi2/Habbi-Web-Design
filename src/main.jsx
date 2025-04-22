@@ -10,6 +10,6 @@ emailjs.init(emailjsConfig.publicKey)
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+      <App />
   </React.StrictMode>,
 )
