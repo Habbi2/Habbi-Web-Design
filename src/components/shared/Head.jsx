@@ -18,7 +18,7 @@ const Head = ({
   title,
   description,
   keywords,
-  ogImage = "/images/og-image.jpg", // Updated default path to ensure correct image location
+  ogImage = "/images/og-image.jpg",
   ogType = "website",
   canonicalUrl,
   author = "Habbi Web Design Team",
@@ -27,8 +27,17 @@ const Head = ({
   
   const fullTitle = title ? `${title} | Habbi Web Design` : 'Habbi | High-End Web Design Studio';
   const baseUrl = 'https://habbi-web-design.vercel.app';
-  const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
-  const url = canonicalUrl ? `${baseUrl}${canonicalUrl}` : (typeof window !== 'undefined' ? window.location.href : baseUrl);
+  
+  // Ensure the image URL is properly formatted
+  let ogImageUrl;
+  if (ogImage.startsWith('http')) {
+    ogImageUrl = ogImage;
+  } else {
+    // Use the absolute URL with the correct path
+    ogImageUrl = `${baseUrl}${ogImage.startsWith('/') ? ogImage : `/${ogImage}`}`;
+  }
+  
+  const url = canonicalUrl ? `${baseUrl}${canonicalUrl.startsWith('/') ? canonicalUrl : `/${canonicalUrl}`}` : baseUrl;
   
   return (
     <Helmet>
@@ -38,13 +47,12 @@ const Head = ({
       {keywords && <meta name="keywords" content={keywords} />}
       
       {/* Canonical URL */}
-      {canonicalUrl && <link rel="canonical" href={url} />}
+      <link rel="canonical" href={url} />
       
       {/* Open Graph / Facebook */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImageUrl} />
-      <meta name="image" property="og:image" content={ogImageUrl} />
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={url} />
       
