@@ -8,6 +8,7 @@ import './App.css'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import CustomCursor from './components/shared/CustomCursor'
+import Head from './components/shared/Head'
 
 // Home page sections
 import HeroSection from './components/home/HeroSection'
@@ -74,6 +75,13 @@ function App() {
 
   return (
     <Router>
+      {/* Default site-wide metadata */}
+      <Head 
+        title="Habbi | High-End Web Design Studio"
+        description="Bold, minimal designs that demand attention. We craft exceptional digital experiences for brands that want to stand out."
+        keywords="web design, digital agency, ui design, ux design, website development"
+        canonicalUrl="/"
+      />
       <CustomCursor />
       <Header />
       <main>
