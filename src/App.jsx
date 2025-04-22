@@ -23,11 +23,22 @@ import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import ServicesPage from './pages/ServicesPage'
 
+// Structured data utilities
+import { createBusinessStructuredData } from './utils/structuredData'
+
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
 
+// Define constants
+const PUBLISH_DATE = "2025-04-22"
+
 function App() {
   const [loading, setLoading] = useState(true)
+
+  // Generate structured data with publish date
+  const structuredData = createBusinessStructuredData({
+    publishDate: PUBLISH_DATE
+  })
 
   useEffect(() => {
     // Simulating loading assets
@@ -81,6 +92,9 @@ function App() {
         description="Bold, minimal designs that demand attention. We craft exceptional digital experiences for brands that want to stand out."
         keywords="web design, digital agency, ui design, ux design, website development"
         canonicalUrl="/"
+        publishDate={PUBLISH_DATE}
+        author="Javier Albertoni"
+        structuredData={structuredData}
       />
       <CustomCursor />
       <Header />
