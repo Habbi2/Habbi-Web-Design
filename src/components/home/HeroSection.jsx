@@ -576,30 +576,6 @@ const HeroSection = () => {
           alignItems: 'center',
           opacity: 0.7,
         }}>
-          <span style={{ 
-            fontSize: isMobile ? '0.7rem' : '0.8rem', 
-            textTransform: 'uppercase', 
-            letterSpacing: '2px',
-            marginBottom: '0.5rem',
-          }}>
-            Scroll Down
-          </span>
-          <div style={{
-            width: '1px',
-            height: isMobile ? '30px' : '50px',
-            backgroundColor: theme.colors.text,
-            position: 'relative',
-            overflow: 'hidden',
-          }}>
-            <span style={{
-              position: 'absolute',
-              top: '-50%',
-              width: '100%',
-              height: '100%',
-              backgroundColor: theme.colors.primary,
-              animation: 'scrollDown 2s ease-in-out infinite',
-            }}></span>
-          </div>
         </div>
       </div>
       
