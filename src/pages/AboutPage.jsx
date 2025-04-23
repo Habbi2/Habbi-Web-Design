@@ -109,8 +109,10 @@ const AboutPage = () => {
         ref={heroRef}
         style={{
           position: 'relative',
-          padding: '12rem 0 8rem',
-          overflow: 'hidden'
+          padding: '8rem 1.5rem', // Reduced padding for mobile
+          overflow: 'hidden',
+          width: '100%',
+          boxSizing: 'border-box' // Ensure padding is included in width calculation
         }}
       >
         {/* Background elements */}
@@ -141,12 +143,14 @@ const AboutPage = () => {
         <div className="container hero-content" style={{ 
           maxWidth: theme.sizes.maxWidth, 
           margin: '0 auto', 
-          padding: '0 2rem',
+          padding: '0', // Remove extra padding inside container
           position: 'relative',
           zIndex: 1,
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <h1 style={{
-            fontSize: 'clamp(3rem, 8vw, 6rem)',
+            fontSize: 'clamp(2.5rem, 8vw, 6rem)', // Smaller minimum font size for mobile
             fontWeight: 700,
             marginBottom: '1.5rem',
             lineHeight: 1.1,
@@ -154,23 +158,25 @@ const AboutPage = () => {
             background: theme.colors.gradient1,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
+            wordWrap: 'break-word', // Prevent text overflow
           }}>
             About Habbi
           </h1>
           
           <p style={{
-            fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+            fontSize: 'clamp(1rem, 2vw, 1.5rem)',
             lineHeight: 1.5,
             maxWidth: '800px',
             marginBottom: '2rem',
             opacity: 0.85,
+            wordWrap: 'break-word', // Prevent text overflow
           }}>
             A collective of digital craftspeople passionate about creating memorable online experiences that bridge the gap between brand objectives and user needs.
           </p>
           
           <div style={{
             display: 'flex',
-            gap: '1.5rem',
+            gap: '1rem', // Reduced gap for mobile
             marginTop: '2rem',
             flexWrap: 'wrap',
           }}>
@@ -178,7 +184,7 @@ const AboutPage = () => {
               href="/contact" 
               style={{
                 display: 'inline-block',
-                padding: '1rem 2rem',
+                padding: '0.9rem 1.8rem', // Slightly reduced padding for mobile
                 background: theme.colors.gradient1,
                 color: '#FFFFFF',
                 fontWeight: 600,
@@ -187,6 +193,8 @@ const AboutPage = () => {
                 fontSize: '1rem',
                 transition: theme.transitions.default,
                 boxShadow: theme.shadows.medium,
+                textAlign: 'center',
+                minWidth: '120px', // Ensure minimum button width
               }}
             >
               Get In Touch
@@ -196,7 +204,7 @@ const AboutPage = () => {
               href="/work" 
               style={{
                 display: 'inline-block',
-                padding: '1rem 2rem',
+                padding: '0.9rem 1.8rem', // Slightly reduced padding for mobile
                 background: 'transparent',
                 color: theme.colors.text,
                 fontWeight: 600,
@@ -205,6 +213,8 @@ const AboutPage = () => {
                 fontSize: '1rem',
                 transition: theme.transitions.default,
                 border: `1px solid rgba(255, 255, 255, 0.2)`,
+                textAlign: 'center',
+                minWidth: '120px', // Ensure minimum button width
               }}
             >
               View Our Work
@@ -214,28 +224,31 @@ const AboutPage = () => {
       </section>
       
       {/* Mission section */}
-      <section style={{ padding: '6rem 0', background: 'linear-gradient(to bottom, #0A0A0A 0%, #111111 100%)' }}>
+      <section style={{ padding: '4rem 1.5rem', background: 'linear-gradient(to bottom, #0A0A0A 0%, #111111 100%)', boxSizing: 'border-box' }}>
         <div 
           ref={missionRef} 
           className="container" 
           style={{ 
             maxWidth: theme.sizes.maxWidth, 
             margin: '0 auto', 
-            padding: '0 2rem' 
+            padding: '0',
+            width: '100%',
+            boxSizing: 'border-box'
           }}
         >
           <div style={{ 
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '4rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', // Smaller minimum width for mobile
+            gap: '3rem', // Reduced gap for mobile
             alignItems: 'center',
           }}>
             <div>
               <h2 style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: 'clamp(1.8rem, 4vw, 3rem)', // Smaller minimum font size for mobile
                 fontWeight: 700,
                 marginBottom: '1.5rem',
                 letterSpacing: '-0.03em',
+                wordWrap: 'break-word', // Prevent text overflow
               }}>
                 Our Mission & <span style={{
                   background: theme.colors.gradient2,
@@ -264,18 +277,18 @@ const AboutPage = () => {
               
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '1.5rem',
-                marginTop: '2.5rem',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', // More responsive grid for values cards
+                gap: '1rem', // Reduced gap for mobile
+                marginTop: '2rem',
               }}>
                 <div style={{
-                  padding: '1.5rem',
+                  padding: '1.25rem',
                   background: theme.colors.backgroundAlt,
                   borderRadius: theme.borderRadius.medium,
                   boxShadow: theme.shadows.small,
                 }}>
                   <h4 style={{
-                    fontSize: '1.2rem',
+                    fontSize: '1.1rem',
                     fontWeight: 700,
                     marginBottom: '0.75rem',
                     color: theme.colors.primary,
@@ -288,13 +301,13 @@ const AboutPage = () => {
                 </div>
                 
                 <div style={{
-                  padding: '1.5rem',
+                  padding: '1.25rem',
                   background: theme.colors.backgroundAlt,
                   borderRadius: theme.borderRadius.medium,
                   boxShadow: theme.shadows.small,
                 }}>
                   <h4 style={{
-                    fontSize: '1.2rem',
+                    fontSize: '1.1rem',
                     fontWeight: 700,
                     marginBottom: '0.75rem',
                     color: theme.colors.secondary,
@@ -307,13 +320,13 @@ const AboutPage = () => {
                 </div>
                 
                 <div style={{
-                  padding: '1.5rem',
+                  padding: '1.25rem',
                   background: theme.colors.backgroundAlt,
                   borderRadius: theme.borderRadius.medium,
                   boxShadow: theme.shadows.small,
                 }}>
                   <h4 style={{
-                    fontSize: '1.2rem',
+                    fontSize: '1.1rem',
                     fontWeight: 700,
                     marginBottom: '0.75rem',
                     color: theme.colors.tertiary,
@@ -326,13 +339,13 @@ const AboutPage = () => {
                 </div>
                 
                 <div style={{
-                  padding: '1.5rem',
+                  padding: '1.25rem',
                   background: theme.colors.backgroundAlt,
                   borderRadius: theme.borderRadius.medium,
                   boxShadow: theme.shadows.small,
                 }}>
                   <h4 style={{
-                    fontSize: '1.2rem',
+                    fontSize: '1.1rem',
                     fontWeight: 700,
                     marginBottom: '0.75rem',
                     color: theme.colors.accent1,
@@ -348,7 +361,9 @@ const AboutPage = () => {
             
             <div style={{
               position: 'relative',
-              minHeight: '500px',
+              minHeight: '400px', // Reduced height for mobile
+              width: '100%', // Ensure full width
+              maxWidth: '100%', // Prevent overflow
             }}>
               {/* Image with gradient overlay */}
               <div style={{
@@ -364,6 +379,7 @@ const AboutPage = () => {
                 backgroundPosition: 'center',
                 boxShadow: theme.shadows.medium,
                 zIndex: 1,
+                maxWidth: '100%', // Prevent overflow
               }} />
               
               {/* Decorative elements */}
@@ -384,8 +400,8 @@ const AboutPage = () => {
                 position: 'absolute',
                 bottom: '10%',
                 right: '5%',
-                width: '120px',
-                height: '120px',
+                width: '80px', // Reduced size for mobile
+                height: '80px', // Reduced size for mobile
                 borderRadius: '50%',
                 border: `2px solid ${theme.colors.primary}`,
                 zIndex: 2,
@@ -395,8 +411,8 @@ const AboutPage = () => {
                 position: 'absolute',
                 top: '10%',
                 left: '0',
-                width: '80px',
-                height: '80px',
+                width: '60px', // Reduced size for mobile
+                height: '60px', // Reduced size for mobile
                 borderRadius: '50%',
                 background: 'rgba(255, 61, 0, 0.2)',
                 zIndex: 2,
@@ -407,18 +423,21 @@ const AboutPage = () => {
       </section>
       
       {/* History/Timeline section */}
-      <section style={{ padding: '8rem 0', background: 'linear-gradient(to bottom, #0A0A0A 0%, #111111 100%)' }}>
+      <section style={{ padding: '6rem 1.5rem', background: 'linear-gradient(to bottom, #0A0A0A 0%, #111111 100%)', boxSizing: 'border-box' }}>
         <div className="container" style={{ 
           maxWidth: theme.sizes.maxWidth, 
           margin: '0 auto', 
-          padding: '0 2rem' 
+          padding: '0',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
-          <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
             <h2 style={{
-              fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+              fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', // Smaller minimum font size for mobile
               fontWeight: 700,
               marginBottom: '1.5rem',
               letterSpacing: '-0.03em',
+              wordWrap: 'break-word', // Prevent text overflow
             }}>
               Our <span style={{
                 background: theme.colors.gradient2,
@@ -444,6 +463,7 @@ const AboutPage = () => {
               position: 'relative',
               maxWidth: '800px',
               margin: '0 auto',
+              paddingLeft: '20px', // Ensure there's space for the timeline line on mobile
             }}
           >
             {/* Timeline line */}
@@ -478,6 +498,7 @@ const AboutPage = () => {
                   marginRight: '1.5rem',
                   zIndex: 2,
                   boxShadow: theme.shadows.small,
+                  flexShrink: 0, // Prevent shrinking on mobile
                 }} />
                 
                 <div>
@@ -485,11 +506,14 @@ const AboutPage = () => {
                     display: 'flex',
                     alignItems: 'center',
                     marginBottom: '0.5rem',
+                    flexWrap: 'wrap', // Allow wrapping on mobile
+                    gap: '0.5rem', // Add gap when wrapping occurs
                   }}>
                     <h3 style={{
-                      fontSize: '1.5rem',
+                      fontSize: '1.3rem', // Smaller font for mobile
                       fontWeight: 700,
-                      marginRight: '1rem',
+                      marginRight: '0.75rem',
+                      wordBreak: 'break-word', // Prevent text overflow
                     }}>
                       {event.title}
                     </h3>
@@ -501,13 +525,14 @@ const AboutPage = () => {
                       borderRadius: theme.borderRadius.small,
                       fontSize: '0.85rem',
                       fontWeight: 600,
+                      display: 'inline-block', // Better display on mobile
                     }}>
                       {event.year}
                     </span>
                   </div>
                   
                   <p style={{
-                    fontSize: '1rem',
+                    fontSize: '0.95rem', // Smaller font for mobile
                     lineHeight: 1.7,
                     opacity: 0.85,
                   }}>
@@ -521,16 +546,18 @@ const AboutPage = () => {
       </section>
       
       {/* CTA section */}
-      <section style={{ padding: '6rem 0' }}>
+      <section style={{ padding: '4rem 1.5rem', boxSizing: 'border-box' }}>
         <div className="container" style={{ 
           maxWidth: theme.sizes.maxWidth, 
           margin: '0 auto', 
-          padding: '0 2rem' 
+          padding: '0',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <div style={{ 
             background: 'linear-gradient(135deg, rgba(0,229,255,0.1) 0%, rgba(156,39,176,0.1) 100%)',
             borderRadius: theme.borderRadius.large,
-            padding: '4rem 2rem',
+            padding: '3rem 1.5rem', // Reduced padding for mobile
             textAlign: 'center',
             position: 'relative',
             overflow: 'hidden',
@@ -559,10 +586,11 @@ const AboutPage = () => {
             }} />
             
             <h2 style={{
-              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontSize: 'clamp(1.8rem, 5vw, 3rem)', // Smaller minimum font size for mobile
               fontWeight: 700,
               marginBottom: '1.5rem',
               letterSpacing: '-0.03em',
+              wordWrap: 'break-word', // Prevent text overflow
             }}>
               Ready to create something <span style={{
                 background: theme.colors.gradient1,
@@ -575,7 +603,7 @@ const AboutPage = () => {
               fontSize: '1.1rem',
               lineHeight: 1.7,
               maxWidth: '700px',
-              margin: '0 auto 2.5rem',
+              margin: '0 auto 2rem', // Reduced bottom margin for mobile
               opacity: 0.9,
             }}>
               We're always looking for new challenges and exciting projects. Let's discuss how we can help transform your digital presence.
@@ -583,7 +611,7 @@ const AboutPage = () => {
             
             <div style={{
               display: 'flex',
-              gap: '1.5rem',
+              gap: '1rem', // Reduced gap for mobile
               justifyContent: 'center',
               flexWrap: 'wrap',
             }}>
@@ -591,7 +619,7 @@ const AboutPage = () => {
                 href="/contact" 
                 style={{
                   display: 'inline-block',
-                  padding: '1rem 2.5rem',
+                  padding: '0.9rem 2rem', // Slightly reduced padding for mobile
                   background: theme.colors.gradient1,
                   color: '#FFFFFF',
                   fontWeight: 600,
@@ -600,6 +628,8 @@ const AboutPage = () => {
                   fontSize: '1.1rem',
                   transition: theme.transitions.default,
                   boxShadow: theme.shadows.medium,
+                  minWidth: '140px', // Set minimum width to ensure button isn't too small
+                  textAlign: 'center', // Center text in button
                 }}
               >
                 Get In Touch
@@ -609,7 +639,7 @@ const AboutPage = () => {
                 href="/work" 
                 style={{
                   display: 'inline-block',
-                  padding: '1rem 2.5rem',
+                  padding: '0.9rem 2rem', // Slightly reduced padding for mobile
                   background: 'transparent',
                   color: theme.colors.text,
                   fontWeight: 600,
@@ -618,6 +648,8 @@ const AboutPage = () => {
                   fontSize: '1.1rem',
                   transition: theme.transitions.default,
                   border: `1px solid rgba(255, 255, 255, 0.2)`,
+                  minWidth: '140px', // Set minimum width to ensure button isn't too small
+                  textAlign: 'center', // Center text in button
                 }}
               >
                 View Our Work

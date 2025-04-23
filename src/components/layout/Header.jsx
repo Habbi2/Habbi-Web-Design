@@ -6,6 +6,21 @@ import { theme } from '../../styles/theme';
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check viewport size
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkDevice(); // Initial check
+    window.addEventListener('resize', checkDevice);
+    
+    return () => {
+      window.removeEventListener('resize', checkDevice);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,8 +80,10 @@ const Header = () => {
           top: 0,
           left: 0,
           right: 0,
+          width: '100%',
+          maxWidth: '100%',
           zIndex: 100,
-          padding: '20px var(--page-padding)',
+          padding: isMobile ? '15px var(--page-padding)' : '20px var(--page-padding)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -78,13 +95,14 @@ const Header = () => {
           boxShadow: scrolled 
             ? '0 10px 30px rgba(0, 0, 0, 0.1)' 
             : 'none',
-          height: theme.sizes.headerHeight,
+          height: isMobile ? '70px' : theme.sizes.headerHeight,
+          boxSizing: 'border-box',
         }}
       >
         <div className="header-logo">
           <Link to="/" style={{ 
             fontFamily: theme.fonts.accent,
-            fontSize: '1.5rem',
+            fontSize: isMobile ? '1.3rem' : '1.5rem',
             fontWeight: 700,
             background: theme.colors.gradient1,
             WebkitBackgroundClip: 'text',
@@ -94,7 +112,13 @@ const Header = () => {
           </Link>
         </div>
 
-        <nav className="desktop-nav" style={{ display: 'none', '@media (min-width: 768px)': { display: 'block' } }}>
+        {/* Desktop Navigation - Hidden on mobile */}
+        <nav 
+          className="desktop-nav" 
+          style={{ 
+            display: isMobile ? 'none' : 'block',
+          }}
+        >
           <ul className="nav-links" style={{ 
             display: 'flex',
             gap: '2rem',
@@ -141,6 +165,7 @@ const Header = () => {
           </ul>
         </nav>
 
+        {/* Mobile menu button - Hidden on desktop */}
         <button 
           className="menu-button"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'} 
@@ -151,29 +176,29 @@ const Header = () => {
             cursor: 'pointer',
             zIndex: 101,
             padding: '0.5rem',
-            display: 'flex',
+            display: isMobile ? 'flex' : 'none',
             flexDirection: 'column',
             justifyContent: 'space-between',
             height: '20px',
             width: '30px',
-            '@media (min-width: 768px)': { display: 'none' }
           }}
         >
           <span 
             style={{
-              width: '100%',
+              width: menuOpen ? '100%' : '80%',
               height: '2px',
-              backgroundColor: theme.colors.text,
+              backgroundColor: menuOpen ? theme.colors.primary : theme.colors.text,
               display: 'block',
               transition: theme.transitions.default,
               transform: menuOpen ? 'rotate(45deg) translate(5px, 5px)' : 'none',
+              marginLeft: menuOpen ? '0' : 'auto',
             }}
           ></span>
           <span 
             style={{
               width: '100%',
               height: '2px',
-              backgroundColor: theme.colors.text,
+              backgroundColor: menuOpen ? theme.colors.primary : theme.colors.text,
               display: 'block',
               transition: theme.transitions.default,
               opacity: menuOpen ? 0 : 1,
@@ -181,17 +206,19 @@ const Header = () => {
           ></span>
           <span 
             style={{
-              width: '100%',
+              width: menuOpen ? '100%' : '60%',
               height: '2px',
-              backgroundColor: theme.colors.text,
+              backgroundColor: menuOpen ? theme.colors.primary : theme.colors.text,
               display: 'block',
               transition: theme.transitions.default,
               transform: menuOpen ? 'rotate(-45deg) translate(5px, -5px)' : 'none',
+              marginLeft: menuOpen ? '0' : 'auto',
             }}
           ></span>
         </button>
       </header>
 
+      {/* Mobile menu - Full screen overlay */}
       <div 
         className={`mobile-menu ${menuOpen ? 'open' : ''}`}
         style={{
@@ -200,7 +227,9 @@ const Header = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: theme.colors.background,
+          width: '100%',
+          maxWidth: '100%',
+          backgroundColor: 'rgba(10, 10, 10, 0.98)',
           zIndex: 99,
           display: 'flex',
           flexDirection: 'column',
@@ -208,6 +237,8 @@ const Header = () => {
           alignItems: 'center',
           transform: 'translateY(-100%)',
           transition: theme.transitions.slow,
+          backdropFilter: 'blur(5px)',
+          boxSizing: 'border-box',
         }}
       >
         <nav>
@@ -215,8 +246,9 @@ const Header = () => {
             listStyle: 'none',
             display: 'flex',
             flexDirection: 'column',
-            gap: '2rem',
+            gap: isMobile ? '1.5rem' : '2rem',
             textAlign: 'center',
+            padding: 0,
           }}>
             {['Work', 'Services', 'About', 'Contact'].map((item) => (
               <li key={item} className="mobile-nav-item">
@@ -225,16 +257,45 @@ const Header = () => {
                   onClick={toggleMenu}
                   style={{
                     fontFamily: theme.fonts.heading,
-                    fontSize: '2rem',
+                    fontSize: isMobile ? '1.5rem' : '2rem',
                     fontWeight: 700,
                     position: 'relative',
                     display: 'inline-block',
+                    padding: '0.3rem 0.5rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (isMobile) return; // Skip animation on mobile
+                    const span = e.currentTarget.querySelector('span');
+                    gsap.to(span, {
+                      width: '100%',
+                      duration: 0.3,
+                      ease: 'power2.out'
+                    });
+                    gsap.to(e.currentTarget, {
+                      color: theme.colors.primary,
+                      duration: 0.3,
+                      ease: 'power2.out'
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    if (isMobile) return; // Skip animation on mobile
+                    const span = e.currentTarget.querySelector('span');
+                    gsap.to(span, {
+                      width: '0%',
+                      duration: 0.3,
+                      ease: 'power2.out'
+                    });
+                    gsap.to(e.currentTarget, {
+                      color: theme.colors.text,
+                      duration: 0.3,
+                      ease: 'power2.out'
+                    });
                   }}
                 >
                   {item}
                   <span style={{
                     position: 'absolute',
-                    bottom: '-5px',
+                    bottom: '0',
                     left: '0',
                     width: '0',
                     height: '2px',
@@ -247,10 +308,55 @@ const Header = () => {
           </ul>
         </nav>
 
-        <div className="mobile-social-links" style={{ marginTop: '4rem' }}>
-          {/* Social links would go here */}
+        {/* Social links for mobile menu */}
+        <div className="mobile-social-links" style={{ 
+          marginTop: isMobile ? '3rem' : '4rem', 
+          display: 'flex', 
+          gap: '1.5rem' 
+        }}>
         </div>
       </div>
+
+      {/* Responsive style tag */}
+      <style>{`
+        /* Mobile specific styles */
+        @media screen and (max-width: 768px) {
+          .mobile-menu {
+            padding: 0 var(--page-padding);
+          }
+          
+          body, html, #root {
+            max-width: 100vw;
+            width: 100%;
+            overflow-x: hidden;
+          }
+          
+          .header {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+          }
+        }
+
+        /* Override backdrop filter for older Chrome versions */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+          header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+          }
+        }
+        
+        /* Make header adapt to landscape orientation on mobile */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+          .mobile-menu {
+            padding-top: 80px;
+            justify-content: flex-start;
+          }
+          
+          .mobile-social-links {
+            margin-top: 1.5rem;
+          }
+        }
+      `}</style>
     </>
   );
 };

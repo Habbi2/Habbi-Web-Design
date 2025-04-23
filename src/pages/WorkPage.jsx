@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { theme } from '../styles/theme';
+import Head from '../components/shared/Head';
 
 // Sample project data - in a real app, this would come from an API or CMS
 const projectsData = [
@@ -107,12 +108,25 @@ const WorkPage = () => {
 
   return (
     <div style={{ background: theme.colors.background, minHeight: '100vh' }}>
+      {/* Add SEO head component */}
+      <Head
+        title="Our Work | Habbi Web Design"
+        description="Explore our portfolio of digital experiences crafted with passion, precision, and purpose. Each project represents our commitment to excellence and innovation."
+        keywords="web design portfolio, UI/UX case studies, digital projects, web development portfolio, brand projects"
+        ogImage="/images/work-og-image.jpg"
+        canonicalUrl="https://habbiwebdesign.com/work"
+        author="Habbi Web Design Team"
+        publishDate="2023-11-15T08:00:00Z"
+      />
+      
       {/* Hero Section */}
       <section 
         style={{ 
-          padding: '10rem 0 6rem',
+          padding: '8rem 1.5rem 4rem', // Reduced padding on all sides for mobile
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+          width: '100%'
         }}
       >
         {/* Background decoration */}
@@ -128,10 +142,16 @@ const WorkPage = () => {
           zIndex: 0,
         }} />
         
-        <div className="container" style={{ maxWidth: theme.sizes.maxWidth, margin: '0 auto', padding: '0 2rem' }}>
+        <div className="container" style={{ 
+          maxWidth: theme.sizes.maxWidth, 
+          margin: '0 auto', 
+          padding: '0', 
+          width: '100%',
+          boxSizing: 'border-box'
+        }}>
           <div ref={pageHeaderRef}>
             <h1 style={{
-              fontSize: 'clamp(3rem, 8vw, 6rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 6rem)', // Smaller minimum font size for mobile
               fontWeight: 700,
               marginBottom: '1.5rem',
               letterSpacing: '-0.03em',
@@ -139,28 +159,34 @@ const WorkPage = () => {
               background: theme.colors.gradient1,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
+              wordWrap: 'break-word', // Prevent text overflow
             }}>
               Our Work
             </h1>
             
             <p style={{
-              fontSize: 'clamp(1.1rem, 2vw, 1.5rem)',
+              fontSize: 'clamp(1rem, 2vw, 1.5rem)', // Smaller minimum font size for mobile
               lineHeight: 1.5,
               maxWidth: '800px',
               marginBottom: '3rem',
               opacity: 0.85,
               fontFamily: theme.fonts.body,
+              wordWrap: 'break-word', // Prevent text overflow
             }}>
               Explore our portfolio of digital experiences crafted with passion, precision, and purpose. 
               Each project represents our commitment to excellence and innovation.
             </p>
             
-            {/* Filter controls */}
+            {/* Filter controls - scrollable container for mobile */}
             <div style={{
               display: 'flex',
-              flexWrap: 'wrap',
-              gap: '1rem',
-              marginBottom: '4rem'
+              gap: '0.8rem', // Smaller gap for mobile
+              marginBottom: '3rem',
+              overflowX: 'auto', // Make it scrollable on mobile
+              WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+              paddingBottom: '1rem', // Add padding to show scrollbar
+              width: '100%',
+              boxSizing: 'border-box' 
             }}>
               <FilterButton 
                 active={filter === 'all'} 
@@ -210,14 +236,21 @@ const WorkPage = () => {
       </section>
       
       {/* Projects Grid Section */}
-      <section style={{ padding: '0 0 8rem' }}>
-        <div className="container" style={{ maxWidth: theme.sizes.maxWidth, margin: '0 auto', padding: '0 2rem' }}>
+      <section style={{ padding: '0 1.5rem 6rem', boxSizing: 'border-box', width: '100%' }}>
+        <div className="container" style={{ 
+          maxWidth: theme.sizes.maxWidth, 
+          margin: '0 auto', 
+          padding: '0',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}>
           <div 
             ref={projectsRef}
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-              gap: '2.5rem',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', // Smaller minimum width for mobile
+              gap: '1.5rem', // Smaller gap for mobile
+              width: '100%'
             }}
           >
             {filteredProjects.length > 0 ? (
@@ -244,9 +277,11 @@ const WorkPage = () => {
       
       {/* Call to Action Section */}
       <section style={{ 
-        padding: '6rem 0',
+        padding: '4rem 1.5rem', // Reduced padding for mobile
         background: 'linear-gradient(to right, rgba(0,0,0,0.9), rgba(17,17,17,0.9))',
         position: 'relative',
+        boxSizing: 'border-box',
+        width: '100%'
       }}>
         <div 
           style={{
@@ -254,8 +289,8 @@ const WorkPage = () => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '80vw',
-            height: '80%',
+            width: '100%', // Full width for mobile
+            height: '100%', // Full height for mobile
             backgroundImage: 'url(https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
@@ -267,21 +302,25 @@ const WorkPage = () => {
         <div className="container" style={{ 
           maxWidth: theme.sizes.maxWidth, 
           margin: '0 auto', 
-          padding: '0 2rem',
+          padding: '0',
           position: 'relative',
           zIndex: 1,
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
           <div style={{ 
             textAlign: 'center', 
             maxWidth: '800px',
             margin: '0 auto',
+            padding: '0 0.5rem', // Add some padding inside the container
           }}>
             <h2 style={{
-              fontSize: 'clamp(2rem, 5vw, 3rem)',
+              fontSize: 'clamp(1.8rem, 5vw, 3rem)', // Smaller minimum font size for mobile
               fontWeight: 700,
               marginBottom: '1.5rem',
               letterSpacing: '-0.03em',
               color: theme.colors.text,
+              wordWrap: 'break-word', // Prevent text overflow
             }}>
               Ready to Transform Your Digital Presence?
             </h2>
@@ -299,7 +338,7 @@ const WorkPage = () => {
               href="/contact" 
               style={{
                 display: 'inline-block',
-                padding: '1rem 2.5rem',
+                padding: '0.9rem 2rem', // Slightly smaller padding for mobile
                 background: theme.colors.gradient1,
                 color: '#FFFFFF',
                 fontWeight: 600,
@@ -308,6 +347,8 @@ const WorkPage = () => {
                 fontSize: '1.1rem',
                 transition: theme.transitions.default,
                 boxShadow: theme.shadows.medium,
+                minWidth: '140px', // Set minimum width for button
+                textAlign: 'center', // Ensure text is centered
               }}
             >
               Start a Project
@@ -357,10 +398,11 @@ const ProjectCard = ({ project }) => {
         flexDirection: 'column',
         position: 'relative',
         transition: theme.transitions.default,
+        maxWidth: '100%', // Ensure card doesn't overflow its container
       }}
     >
       <div style={{ 
-        height: '240px',
+        height: '200px', // Reduced height for mobile
         overflow: 'hidden',
       }}>
         <div 
@@ -377,7 +419,7 @@ const ProjectCard = ({ project }) => {
       </div>
       
       <div style={{ 
-        padding: '1.5rem',
+        padding: '1.25rem', // Smaller padding for mobile
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -386,7 +428,9 @@ const ProjectCard = ({ project }) => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: '0.5rem'
+          marginBottom: '0.5rem',
+          flexWrap: 'wrap', // Allow wrapping on very small screens
+          gap: '0.5rem', // Add gap when wrapped
         }}>
           <span style={{ 
             fontSize: '0.85rem',
@@ -410,9 +454,10 @@ const ProjectCard = ({ project }) => {
         </div>
         
         <h3 style={{ 
-          fontSize: '1.5rem',
+          fontSize: '1.3rem', // Smaller font for mobile
           fontWeight: 700,
           marginBottom: '0.75rem',
+          wordBreak: 'break-word', // Prevent text overflow
         }}>
           {project.title}
         </h3>
@@ -421,7 +466,7 @@ const ProjectCard = ({ project }) => {
           fontSize: '0.95rem',
           lineHeight: 1.6,
           color: theme.colors.textSecondary,
-          marginBottom: '1.5rem',
+          marginBottom: '1.25rem',
           flexGrow: 1,
         }}>
           {project.description}
@@ -431,14 +476,14 @@ const ProjectCard = ({ project }) => {
           display: 'flex',
           flexWrap: 'wrap',
           gap: '0.5rem',
-          marginBottom: '1.5rem'
+          marginBottom: '0.75rem' // Reduced margin for mobile
         }}>
           {project.technologies.map((tech, index) => (
             <span 
               key={index}
               style={{
                 fontSize: '0.75rem',
-                padding: '0.3rem 0.6rem',
+                padding: '0.2rem 0.5rem', // Smaller padding for mobile
                 borderRadius: theme.borderRadius.small,
                 background: 'rgba(255, 255, 255, 0.05)',
                 color: theme.colors.textSecondary,
@@ -459,15 +504,17 @@ const FilterButton = ({ children, active, onClick }) => {
     <button 
       onClick={onClick}
       style={{
-        padding: '0.6rem 1.2rem',
+        padding: '0.5rem 1rem', // Smaller padding for mobile
         borderRadius: theme.borderRadius.small,
         background: active ? theme.colors.primary : 'rgba(255, 255, 255, 0.05)',
         color: active ? '#0A0A0A' : theme.colors.textSecondary,
         border: 'none',
         fontWeight: 500,
-        fontSize: '0.9rem',
+        fontSize: '0.85rem', // Smaller font for mobile
         cursor: 'pointer',
         transition: theme.transitions.default,
+        whiteSpace: 'nowrap', // Prevent text wrapping inside buttons
+        flexShrink: 0, // Prevent button from shrinking in the scroll container
       }}
     >
       {children}

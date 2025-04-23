@@ -32,6 +32,14 @@ gsap.registerPlugin(ScrollTrigger)
 // Define constants
 const PUBLISH_DATE = "2025-04-22"
 
+// Define spin animation style
+const spinAnimation = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
 function App() {
   const [loading, setLoading] = useState(true)
 
@@ -74,12 +82,7 @@ function App() {
           borderTopColor: '#00E5FF',
           animation: 'spin 1s linear infinite',
         }} />
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
+        <style>{spinAnimation}</style>
       </div>
     )
   }

@@ -30,6 +30,34 @@ export const theme = {
     headerHeight: '80px',
   },
   
+  // Media query breakpoints for responsive design
+  breakpoints: {
+    xs: '320px',      // Small phones
+    sm: '480px',      // Large phones
+    md: '768px',      // Tablets
+    lg: '1024px',     // Laptops/small desktops
+    xl: '1280px',     // Large desktops
+    xxl: '1440px'     // Extra large displays
+  },
+  
+  // Media query helpers for styled-components
+  media: {
+    xs: `@media screen and (max-width: 320px)`,
+    sm: `@media screen and (max-width: 480px)`,
+    md: `@media screen and (max-width: 768px)`,
+    lg: `@media screen and (max-width: 1024px)`,
+    xl: `@media screen and (max-width: 1280px)`,
+    xxl: `@media screen and (max-width: 1440px)`,
+    
+    // Orientation helpers
+    portrait: `@media screen and (orientation: portrait)`,
+    landscape: `@media screen and (orientation: landscape)`,
+    
+    // Chrome device specific helpers
+    mobileSAfari: `@media screen and (max-width: 767px) and (-webkit-min-device-pixel-ratio: 2)`,
+    chromeDesktop: `@media screen and (min-width: 1025px) and (-webkit-min-device-pixel-ratio: 1)`,
+  },
+  
   transitions: {
     default: '0.3s ease',
     slow: '0.6s ease-in-out',

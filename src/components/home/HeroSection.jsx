@@ -12,10 +12,32 @@ const HeroSection = () => {
   const videoRef = useRef(null);
   const mouseFollowerRef = useRef(null);
   const shapesRef = useRef(null);
+  const typingTextRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(true); // Default to mobile for initial render
+  const [windowWidth, setWindowWidth] = useState(0);
+  
+  // Check for mobile device on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      const width = window.innerWidth;
+      setWindowWidth(width);
+      setIsMobile(width <= 768);
+    };
+    
+    checkMobile(); // Check on initial load
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
   
   // Track mouse position for interactive elements
   useEffect(() => {
+    // Only enable mouse tracking on non-mobile devices
+    if (isMobile) return;
+    
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
       setMousePosition({ x: clientX, y: clientY });
@@ -59,7 +81,66 @@ const HeroSection = () => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [isMobile]);
+  
+  // Typing animation for the typing text element
+  useEffect(() => {
+    if (isMobile || !typingTextRef.current) return;
+    
+    const texts = [
+      "Designing the future, one pixel at a time.",
+      "Crafting digital experiences that inspire.",
+      "Where creativity meets functionality.",
+      "Elevating brands through great design."
+    ];
+    
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+    let pauseDuration = 1500;
+    
+    const type = () => {
+      const currentText = texts[currentTextIndex];
+      
+      if (isDeleting) {
+        // Deleting text
+        if (typingTextRef.current) {
+          typingTextRef.current.textContent = currentText.substring(0, currentCharIndex);
+          currentCharIndex--;
+          typingSpeed = 50;
+        }
+        
+        // When deletion is complete
+        if (currentCharIndex < 0) {
+          isDeleting = false;
+          currentTextIndex = (currentTextIndex + 1) % texts.length;
+          currentCharIndex = 0;
+          typingSpeed = 100;
+          setTimeout(type, 500); // Pause before typing next text
+          return;
+        }
+      } else {
+        // Typing text
+        if (typingTextRef.current) {
+          typingTextRef.current.textContent = currentText.substring(0, currentCharIndex + 1);
+          currentCharIndex++;
+          typingSpeed = 100;
+        }
+        
+        // When typing is complete
+        if (currentCharIndex >= currentText.length) {
+          isDeleting = true;
+          typingSpeed = pauseDuration; // Pause before deleting
+        }
+      }
+      
+      setTimeout(type, typingSpeed);
+    };
+    
+    // Start typing animation
+    setTimeout(type, 1000);
+  }, [isMobile]);
   
   useEffect(() => {
     // Create a timeline for hero animations
@@ -91,14 +172,18 @@ const HeroSection = () => {
       { scale: 0, opacity: 0 },
       { scale: 1, opacity: 1, stagger: 0.1, duration: 0.8, ease: "back.out(2)" },
       "-=1"
-    )
-    .fromTo(mouseFollowerRef.current,
-      { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 0.15, duration: 1, ease: "elastic.out(1, 0.5)" },
-      "-=0.5"
     );
     
-    // Create scroll animation for parallax effect
+    // Only animate mouse follower on non-mobile devices
+    if (!isMobile && mouseFollowerRef.current) {
+      tl.fromTo(mouseFollowerRef.current,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 0.15, duration: 1, ease: "elastic.out(1, 0.5)" },
+        "-=0.5"
+      );
+    }
+    
+    // Create scroll animation for parallax effect - lighter effect on mobile
     gsap.to(heroRef.current, {
       scrollTrigger: {
         trigger: heroRef.current,
@@ -106,7 +191,7 @@ const HeroSection = () => {
         end: "bottom top",
         scrub: true
       },
-      y: 250,
+      y: isMobile ? 150 : 250,
       ease: "none"
     });
     
@@ -129,7 +214,7 @@ const HeroSection = () => {
     return () => {
       tl.kill();
     }
-  }, []);
+  }, [isMobile]);
 
   return (
     <section 
@@ -143,7 +228,7 @@ const HeroSection = () => {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        padding: '0 var(--page-padding)',
+        padding: windowWidth < 480 ? '0 20px' : '0 var(--page-padding)',
       }}
     >
       {/* Video background */}
@@ -194,23 +279,26 @@ const HeroSection = () => {
         }} />
       </div>
       
-      {/* Mouse follower effect */}
-      <div 
-        ref={mouseFollowerRef}
-        style={{
-          position: 'absolute',
-          width: '300px',
-          height: '300px',
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${theme.colors.primary}40 0%, ${theme.colors.primary}00 70%)`,
-          transform: 'translate(-50%, -50%)',
-          pointerEvents: 'none',
-          zIndex: 1,
-          opacity: 0,
-        }}
-      />
+      {/* Mouse follower effect - only shown on desktop */}
+      {!isMobile && (
+        <div 
+          ref={mouseFollowerRef}
+          style={{
+            position: 'absolute',
+            width: '300px',
+            height: '300px',
+            borderRadius: '50%',
+            background: `radial-gradient(circle, ${theme.colors.primary}40 0%, ${theme.colors.primary}00 70%)`,
+            transform: 'translate(-50%, -50%)',
+            pointerEvents: 'none',
+            zIndex: 1,
+            opacity: 0,
+            display: 'block', // Removed conditional display
+          }}
+        />
+      )}
       
-      {/* Floating 3D Shapes */}
+      {/* Floating 3D Shapes - simplified on mobile */}
       <div 
         ref={shapesRef} 
         style={{ 
@@ -223,6 +311,7 @@ const HeroSection = () => {
           pointerEvents: 'none',
         }}
       >
+        {/* Render fewer shapes on mobile */}
         <div 
           className="floating-shape"
           data-speed="0.05"
@@ -230,8 +319,8 @@ const HeroSection = () => {
             position: 'absolute',
             top: '15%',
             left: '15%',
-            width: '80px',
-            height: '80px',
+            width: windowWidth < 768 ? '60px' : '80px',
+            height: windowWidth < 768 ? '60px' : '80px',
             background: `linear-gradient(135deg, ${theme.colors.primary}80, ${theme.colors.primary}20)`,
             borderRadius: '24px',
             transform: 'rotate(45deg)',
@@ -240,20 +329,22 @@ const HeroSection = () => {
           }}
         />
         
-        <div 
-          className="floating-shape"
-          data-speed="-0.03"
-          style={{
-            position: 'absolute',
-            bottom: '20%',
-            left: '10%',
-            width: '60px',
-            height: '60px',
-            border: `2px solid ${theme.colors.secondary}60`,
-            borderRadius: '50%',
-            opacity: 0,
-          }}
-        />
+        {windowWidth >= 768 && (
+          <div 
+            className="floating-shape"
+            data-speed="-0.03"
+            style={{
+              position: 'absolute',
+              bottom: '20%',
+              left: '10%',
+              width: '60px',
+              height: '60px',
+              border: `2px solid ${theme.colors.secondary}60`,
+              borderRadius: '50%',
+              opacity: 0,
+            }}
+          />
+        )}
         
         <div 
           className="floating-shape"
@@ -262,28 +353,30 @@ const HeroSection = () => {
             position: 'absolute',
             top: '25%',
             right: '15%',
-            width: '120px',
-            height: '120px',
+            width: isMobile ? '80px' : '120px',
+            height: isMobile ? '80px' : '120px',
             border: `2px solid ${theme.colors.primary}60`,
             borderRadius: '50%',
             opacity: 0,
           }}
         />
         
-        <div 
-          className="floating-shape"
-          data-speed="-0.06"
-          style={{
-            position: 'absolute',
-            bottom: '30%',
-            right: '20%',
-            width: '100px',
-            height: '100px',
-            background: `linear-gradient(135deg, ${theme.colors.tertiary}50, ${theme.colors.tertiary}10)`,
-            borderRadius: '30px',
-            opacity: 0,
-          }}
-        />
+        {!isMobile && (
+          <div 
+            className="floating-shape"
+            data-speed="-0.06"
+            style={{
+              position: 'absolute',
+              bottom: '30%',
+              right: '20%',
+              width: '100px',
+              height: '100px',
+              background: `linear-gradient(135deg, ${theme.colors.tertiary}50, ${theme.colors.tertiary}10)`,
+              borderRadius: '30px',
+              opacity: 0,
+            }}
+          />
+        )}
         
         <div 
           className="floating-shape"
@@ -306,16 +399,19 @@ const HeroSection = () => {
         position: 'relative',
         zIndex: 2,
         maxWidth: theme.sizes.maxWidth,
+        width: '100%',
+        padding: windowWidth < 480 ? '0 10px' : '0',
       }}>
         <h1 
           ref={headingRef}
           style={{
-            fontSize: 'clamp(3rem, 10vw, 8rem)',
+            fontSize: 'clamp(2.5rem, 8vw, 8rem)',
             fontWeight: 800,
             lineHeight: '1',
-            marginBottom: '2rem',
+            marginBottom: windowWidth < 768 ? '1rem' : '2rem',
             textTransform: 'uppercase',
             letterSpacing: '-0.03em',
+            wordBreak: 'break-word', // Add word-breaking for small screens
           }}
         >
           <span className="animated-text" style={{ display: 'inline-block' }}>Design</span>{' '}
@@ -340,22 +436,28 @@ const HeroSection = () => {
         </h1>
         
         <p className="hero-tagline" style={{
-          fontSize: 'clamp(1.2rem, 2vw, 1.5rem)',
+          fontSize: 'clamp(1rem, 1.5vw, 1.5rem)',
           maxWidth: '600px',
-          marginBottom: '3rem',
+          marginBottom: isMobile ? '2rem' : '3rem',
           opacity: 0.8,
         }}>
           We craft bold digital experiences that transform brands 
           and create meaningful connections with your audience.
         </p>
         
-        <div className="hero-cta" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+        <div className="hero-cta" style={{ 
+          display: 'flex', 
+          gap: isMobile ? '1rem' : '1.5rem', 
+          alignItems: 'center',
+          flexDirection: isMobile ? 'column' : 'row',
+          width: isMobile ? '100%' : 'auto'
+        }}>
           <a 
             href="#work" 
             style={{
               display: 'inline-block',
-              padding: '1rem 3rem',
-              fontSize: '1.2rem',
+              padding: isMobile ? '0.8rem 2rem' : '1rem 3rem',
+              fontSize: isMobile ? '1rem' : '1.2rem',
               fontWeight: 600,
               backgroundColor: theme.colors.primary,
               color: '#000',
@@ -363,8 +465,11 @@ const HeroSection = () => {
               position: 'relative',
               overflow: 'hidden',
               transition: theme.transitions.default,
+              width: isMobile ? '100%' : 'auto',
+              textAlign: isMobile ? 'center' : 'left',
             }}
             onMouseEnter={(e) => {
+              if (isMobile) return;
               const btn = e.currentTarget;
               const span = btn.querySelector('span');
               gsap.to(span, {
@@ -374,6 +479,7 @@ const HeroSection = () => {
               });
             }}
             onMouseLeave={(e) => {
+              if (isMobile) return;
               const btn = e.currentTarget;
               const span = btn.querySelector('span');
               gsap.to(span, {
@@ -400,12 +506,15 @@ const HeroSection = () => {
             style={{
               display: 'inline-block',
               padding: '1rem 0',
-              fontSize: '1.2rem',
+              fontSize: isMobile ? '1rem' : '1.2rem',
               fontWeight: 600,
               color: theme.colors.text,
               position: 'relative',
+              textAlign: isMobile ? 'center' : 'left',
+              width: isMobile ? '100%' : 'auto',
             }}
             onMouseEnter={(e) => {
+              if (isMobile) return;
               const link = e.currentTarget;
               const span = link.querySelector('span');
               gsap.to(span, {
@@ -415,6 +524,7 @@ const HeroSection = () => {
               });
             }}
             onMouseLeave={(e) => {
+              if (isMobile) return;
               const link = e.currentTarget;
               const span = link.querySelector('span');
               gsap.to(span, {
@@ -428,8 +538,8 @@ const HeroSection = () => {
             <span style={{
               position: 'absolute',
               bottom: '0.8rem',
-              left: 0,
-              width: '0%',
+              left: isMobile ? '25%' : 0,
+              width: isMobile ? '50%' : '0%',
               height: '2px',
               backgroundColor: theme.colors.primary,
               transition: theme.transitions.default,
@@ -437,24 +547,28 @@ const HeroSection = () => {
           </a>
         </div>
         
-        {/* Interactive typing text */}
-        <div style={{ 
-          position: 'absolute',
-          bottom: '15%',
-          right: '5%',
-          transform: 'translateY(-50%)',
-          fontFamily: theme.fonts.accent,
-          fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
-          opacity: 0.7,
-          display: 'none', // Will be shown in larger viewports with JS
-        }} className="typing-text">
-          <span style={{ color: theme.colors.primary }}>&lt;code&gt;</span> beautiful interfaces <span style={{ color: theme.colors.primary }}>&lt;/code&gt;</span>
-        </div>
+        {/* Interactive typing text - only on larger screens */}
+        {!isMobile && (
+          <div 
+            ref={typingTextRef}
+            style={{ 
+              position: 'absolute',
+              bottom: '15%',
+              right: '5%',
+              transform: 'translateY(-50%)',
+              fontFamily: theme.fonts.accent,
+              fontSize: 'clamp(1rem, 1.5vw, 1.2rem)',
+              opacity: 0.7,
+            }} 
+            className="typing-text"
+          >
+          </div>
+        )}
         
         {/* Scroll indicator */}
         <div style={{
           position: 'absolute',
-          bottom: '2rem',
+          bottom: isMobile ? '1rem' : '2rem',
           left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex',
@@ -463,7 +577,7 @@ const HeroSection = () => {
           opacity: 0.7,
         }}>
           <span style={{ 
-            fontSize: '0.8rem', 
+            fontSize: isMobile ? '0.7rem' : '0.8rem', 
             textTransform: 'uppercase', 
             letterSpacing: '2px',
             marginBottom: '0.5rem',
@@ -472,7 +586,7 @@ const HeroSection = () => {
           </span>
           <div style={{
             width: '1px',
-            height: '50px',
+            height: isMobile ? '30px' : '50px',
             backgroundColor: theme.colors.text,
             position: 'relative',
             overflow: 'hidden',
@@ -490,7 +604,7 @@ const HeroSection = () => {
       </div>
       
       {/* Add keyframes animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes gradientAnimation {
           0% { background-position: 0% 50% }
           50% { background-position: 100% 50% }
@@ -500,13 +614,6 @@ const HeroSection = () => {
         @keyframes scrollDown {
           0% { top: -100% }
           100% { top: 100% }
-        }
-        
-        /* Show typing text on larger screens */
-        @media screen and (min-width: 768px) {
-          .typing-text {
-            display: block;
-          }
         }
       `}</style>
     </section>

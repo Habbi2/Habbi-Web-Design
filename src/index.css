@@ -14,6 +14,13 @@
 
   /* Dark theme variables will be handled by our theme.js */
   --page-padding: 2rem;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 * {
@@ -34,14 +41,13 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: #0A0A0A;
   color: #FFFFFF;
   overflow-x: hidden;
+  /* Removed display: flex and place-items: center which were causing centering issues */
 }
 
 h1 {
@@ -162,6 +168,79 @@ select.dark-select option {
   color: #fff !important;
 }
 
+/* Responsive Media Queries */
+/* Extra Small Devices (phones, 320px and up) */
+@media screen and (max-width: 320px) {
+  :root {
+    --page-padding: 1rem;
+  }
+  
+  h1 {
+    font-size: 2.2em;
+  }
+  
+  h2 {
+    font-size: 1.8em;
+  }
+  
+  .container {
+    padding: 0 var(--page-padding);
+  }
+  
+  .cursor-dot, .cursor-outline {
+    display: none; /* Hide custom cursor on mobile */
+  }
+}
+
+/* Small Devices (large phones, 480px and up) */
+@media screen and (max-width: 480px) {
+  :root {
+    --page-padding: 1.2rem;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+  }
+  
+  h2 {
+    font-size: 2em;
+  }
+  
+  .cursor-dot, .cursor-outline {
+    display: none; /* Hide custom cursor on mobile */
+  }
+}
+
+/* Medium Devices (tablets, 768px and up) */
+@media screen and (max-width: 768px) {
+  :root {
+    --page-padding: 1.5rem;
+  }
+  
+  h1 {
+    font-size: 2.8em;
+  }
+  
+  .cursor-dot, .cursor-outline {
+    display: none; /* Hide custom cursor on tablets */
+  }
+}
+
+/* Large Devices (desktops, 1024px and up) */
+@media screen and (max-width: 1024px) {
+  .container {
+    max-width: 900px;
+  }
+}
+
+/* Extra Large Devices (large desktops, 1280px and up) */
+@media screen and (max-width: 1280px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Light theme preference (keeping this from the original) */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -172,5 +251,23 @@ select.dark-select option {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+/* Chrome device-specific optimizations */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  * {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Touch device optimization */
+@media (hover: none) {
+  button:hover {
+    border-color: transparent; /* Remove hover effects on touch devices */
+  }
+  
+  a:hover {
+    color: inherit; /* Reset hover color on touch devices */
   }
 }

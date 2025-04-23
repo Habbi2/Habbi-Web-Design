@@ -50,49 +50,22 @@ const PortfolioSection = () => {
   const sectionRef = useRef(null);
   const carouselRef = useRef(null);
   const [activeItem, setActiveItem] = useState(0);
-  const [carouselRadius, setCarouselRadius] = useState(400);
-  const [itemWidth, setItemWidth] = useState(500);
-  const [itemHeight, setItemHeight] = useState(350);
+  const [isMobile, setIsMobile] = useState(false);
   
-  // Calculate responsive dimensions
+  // Check if the device is mobile
   useEffect(() => {
-    const updateDimensions = () => {
-      const windowWidth = window.innerWidth;
-      
-      // Adjust carousel radius and item size based on screen width
-      if (windowWidth <= 480) {
-        // Small mobile
-        setCarouselRadius(200);
-        setItemWidth(280);
-        setItemHeight(220);
-      } else if (windowWidth <= 768) {
-        // Large mobile/small tablet
-        setCarouselRadius(280);
-        setItemWidth(350);
-        setItemHeight(250);
-      } else if (windowWidth <= 1024) {
-        // Tablet/small laptop
-        setCarouselRadius(350);
-        setItemWidth(420);
-        setItemHeight(300);
-      } else {
-        // Desktop
-        setCarouselRadius(400);
-        setItemWidth(500);
-        setItemHeight(350);
-      }
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
     };
     
-    // Initial calculation
-    updateDimensions();
+    // Initial check
+    handleResize();
     
-    // Update dimensions when window is resized
-    window.addEventListener('resize', updateDimensions);
+    // Add event listener
+    window.addEventListener('resize', handleResize);
     
-    // Cleanup
-    return () => {
-      window.removeEventListener('resize', updateDimensions);
-    };
+    // Clean up
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
   
   useEffect(() => {
@@ -131,13 +104,16 @@ const PortfolioSection = () => {
   // Handle rotation of the carousel
   const rotateCarousel = (index) => {
     setActiveItem(index);
-    const angle = index * -(360 / portfolioItems.length);
     
-    gsap.to(carouselRef.current, {
-      rotationY: angle,
-      duration: 1,
-      ease: 'power3.out',
-    });
+    if (!isMobile) {
+      const angle = index * -(360 / portfolioItems.length);
+      
+      gsap.to(carouselRef.current, {
+        rotationY: angle,
+        duration: 1,
+        ease: 'power3.out',
+      });
+    }
   };
   
   // Auto-rotate carousel
@@ -148,7 +124,29 @@ const PortfolioSection = () => {
     }, 5000);
     
     return () => clearInterval(interval);
-  }, [activeItem]);
+  }, [activeItem, isMobile]);
+
+  // Calculate responsive card width
+  const getCardWidth = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 480) return 'calc(100% - 40px)'; // Very small devices
+      if (window.innerWidth < 768) return 'calc(90% - 40px)';  // Small devices
+      if (window.innerWidth < 1024) return '400px';            // Medium devices
+      return '500px';                                          // Large devices
+    }
+    return '500px'; // Default
+  };
+
+  // Calculate margin offset for centering
+  const getCardMarginLeft = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 480) return 'calc(-50% + 20px)'; 
+      if (window.innerWidth < 768) return 'calc(-45% + 20px)';
+      if (window.innerWidth < 1024) return '-200px';
+      return '-250px';
+    }
+    return '-250px'; // Default
+  };
 
   return (
     <section 
@@ -177,14 +175,13 @@ const PortfolioSection = () => {
         </h2>
       </div>
       
-      {/* 3D Carousel */}
+      {/* Carousel Container - maintains 600px height per requirement */}
       <div style={{
         position: 'relative',
-        height: itemHeight * 1.5 + 'px',
-        perspective: '1000px',
+        height: '600px',
+        perspective: isMobile ? 'none' : '1000px',
         marginBottom: '5rem',
-        maxWidth: '100%',
-        overflowX: 'hidden',
+        overflow: 'hidden',
       }}>
         <div 
           ref={carouselRef}
@@ -192,12 +189,13 @@ const PortfolioSection = () => {
             width: '100%',
             height: '100%',
             position: 'absolute',
-            transformStyle: 'preserve-3d',
+            transformStyle: isMobile ? 'flat' : 'preserve-3d',
             transition: 'transform 1s ease',
           }}
         >
           {portfolioItems.map((item, index) => {
             const angle = index * (360 / portfolioItems.length);
+            const radius = 400;
             
             return (
               <div 
@@ -205,22 +203,26 @@ const PortfolioSection = () => {
                 className="portfolio-item"
                 style={{
                   position: 'absolute',
-                  width: itemWidth + 'px',
-                  height: itemHeight + 'px',
+                  width: getCardWidth(),
+                  height: '350px', // Keeping height as is per requirement
                   top: '50%',
                   left: '50%',
-                  margin: `-${itemHeight / 2}px 0 0 -${itemWidth / 2}px`,
+                  margin: `-175px 0 0 ${getCardMarginLeft()}`,
                   background: '#111',
-                  transformStyle: 'preserve-3d',
-                  transform: `rotateY(${angle}deg) translateZ(${carouselRadius}px)`,
+                  transformStyle: isMobile ? 'flat' : 'preserve-3d',
+                  transform: isMobile 
+                    ? `translateX(${index === activeItem ? 0 : (index < activeItem ? '-100%' : '100%')})`
+                    : `rotateY(${angle}deg) translateZ(${radius}px)`,
                   transition: 'all 0.5s ease',
                   borderRadius: theme.borderRadius.large,
                   overflow: 'hidden',
                   boxShadow: theme.shadows.large,
-                  opacity: activeItem === index ? 1 : 0.7,
+                  opacity: activeItem === index ? 1 : (isMobile ? 0 : 0.7),
                   border: activeItem === index 
                     ? `2px solid ${item.color}`
                     : '2px solid transparent',
+                  zIndex: activeItem === index ? 10 : 1,
+                  display: isMobile ? (activeItem === index ? 'block' : 'none') : 'block',
                 }}
                 onClick={() => rotateCarousel(index)}
               >
@@ -245,7 +247,7 @@ const PortfolioSection = () => {
                   bottom: 0,
                   left: 0,
                   width: '100%',
-                  padding: '1.5rem',
+                  padding: '2rem',
                   background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)',
                   transition: 'all 0.3s ease',
                   transform: activeItem === index ? 'translateY(0)' : 'translateY(20px)',
@@ -263,7 +265,7 @@ const PortfolioSection = () => {
                     {item.category}
                   </span>
                   <h3 style={{
-                    fontSize: window.innerWidth <= 768 ? '1.3rem' : '1.8rem',
+                    fontSize: '1.8rem',
                     fontWeight: 700,
                     marginBottom: '0.5rem',
                   }}>
@@ -273,7 +275,6 @@ const PortfolioSection = () => {
                     fontSize: '0.9rem',
                     opacity: 0.8,
                     marginBottom: '1rem',
-                    display: window.innerWidth <= 480 ? 'none' : 'block',
                   }}>
                     {item.description}
                   </p>
@@ -338,15 +339,6 @@ const PortfolioSection = () => {
           }}></span>
         </a>
       </div>
-
-      {/* Add CSS for better responsiveness */}
-      <style jsx>{`
-        @media screen and (max-width: 768px) {
-          .portfolio-item {
-            pointer-events: auto !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };
