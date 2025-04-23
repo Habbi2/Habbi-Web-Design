@@ -639,7 +639,7 @@ const ContactSection = () => {
                 gap: '1.5rem',
               }}>
                 
-                <a href="#" style={{
+                <a href="https://www.instagram.com/habbiwebdesign/" style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -651,20 +651,6 @@ const ContactSection = () => {
                   fontSize: '1.2rem',
                 }}>
                   <span>📷</span>
-                </a>
-                
-                <a href="#" style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '45px',
-                  height: '45px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  transition: theme.transitions.default,
-                  fontSize: '1.2rem',
-                }}>
-                  <span>🐦</span>
                 </a>
               </div>
             </div>
