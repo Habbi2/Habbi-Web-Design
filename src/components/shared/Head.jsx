@@ -22,7 +22,7 @@ const Head = ({
   
   const fullTitle = title ? `${title} | Habbi Web Design` : 'Habbi | High-End Web Design Studio';
   // Use your actual production domain here
-  const baseUrl = 'https://habbi-web-design.vercel.app';
+  const baseUrl = 'https://www.habbiwebdesign.site/';
   const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage}`;
   const url = canonicalUrl || '/';
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
