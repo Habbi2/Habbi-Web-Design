@@ -156,7 +156,7 @@ const Footer = () => {
               gridTemplateColumns: '1fr 1fr',
               gap: '1rem',
             }}>
-              {['Home', 'Work', 'Services', 'About', 'Contact'].map(item => (
+              {['Home', 'Work', 'Services', 'Tools', 'About', 'Contact'].map(item => (
                 <li key={item} style={{ marginBottom: isMobile ? '0.5rem' : '1rem' }}>
                   <Link 
                     to={item === 'Home' ? '/' : `/${item.toLowerCase()}`} 

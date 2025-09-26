@@ -124,7 +124,7 @@ const Header = () => {
             gap: '2rem',
             listStyle: 'none',
           }}>
-            {['Work', 'Services', 'About', 'Contact'].map((item) => (
+            {['Work', 'Services', 'Tools', 'About', 'Contact'].map((item) => (
               <li key={item} style={{ position: 'relative' }}>
                 <Link 
                   to={`/${item.toLowerCase()}`}
@@ -250,7 +250,7 @@ const Header = () => {
             textAlign: 'center',
             padding: 0,
           }}>
-            {['Work', 'Services', 'About', 'Contact'].map((item) => (
+            {['Work', 'Services', 'Tools', 'About', 'Contact'].map((item) => (
               <li key={item} className="mobile-nav-item">
                 <Link 
                   to={`/${item.toLowerCase()}`}

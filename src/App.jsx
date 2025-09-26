@@ -22,6 +22,7 @@ import WorkPage from './pages/WorkPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import ServicesPage from './pages/ServicesPage'
+import ToolsPage from './pages/ToolsPage'
 
 // Structured data utilities
 import { createBusinessStructuredData } from './utils/structuredData'
@@ -114,6 +115,7 @@ function App() {
           } />
           <Route path="/work" element={<WorkPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/tools" element={<ToolsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><h1>Page Not Found</h1></div>} />
